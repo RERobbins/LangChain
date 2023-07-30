@@ -11,7 +11,6 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
-# openai.api_key = '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'
 
 @st.cache_data
 def setup_documents(pdf_file_path, chunk_size, chunk_overlap):
