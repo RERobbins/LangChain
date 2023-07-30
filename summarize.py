@@ -14,7 +14,7 @@ openai.api_key = os.environ["OPENAI_API_KEY"]
 
 @st.cache_data
 def setup_documents(file_path, chunk_size, chunk_overlap):
-    extension = os.path.splitext(file_path)[1][:1].lower()
+    extension = os.path.splitext(file_path)[1][1:].lower()
     if extension == "pdf":
         loader = PyPDFLoader(file_path)
     else:
