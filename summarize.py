@@ -1,7 +1,7 @@
 import openai
 import streamlit as st
 import os
-from langchain.document_loaders import PyPDFLoader
+from langchain.document_loaders import PyPDFLoader, TextLoader
 from langchain import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains.summarize import load_summarize_chain
@@ -14,8 +14,13 @@ openai.api_key = os.environ["OPENAI_API_KEY"]
 
 
 @st.cache_data
-def setup_documents(pdf_file_path, chunk_size, chunk_overlap):
-    loader = PyPDFLoader(pdf_file_path)
+def setup_documents(file_path, chunk_size, chunk_overlap):
+    extension = os.path.splitext(filename)[1][:1].lower()
+    if extension == "pdf":
+        loader = PyPDFLoader(file_path)
+    else:
+        loader = TextLoader(file_path)
+        
     docs_raw = loader.load()
     docs_raw_text = [doc.page_content for doc in docs_raw]
     text_splitter = RecursiveCharacterTextSplitter(
@@ -23,6 +28,8 @@ def setup_documents(pdf_file_path, chunk_size, chunk_overlap):
     )
     docs = text_splitter.create_documents(docs_raw_text)
     return docs
+
+def get_extension (file_path)
 
 
 def custom_summary(docs, llm, custom_prompt, chain_type, num_summaries):
@@ -105,7 +112,7 @@ def main():
 
     else:
         user_prompt = st.text_input("Enter the user prompt")
-        pdf_file_path = st.text_input("Enter the pdf file path")
+        file_path = st.text_input("Enter the file path")
 
         temperature = st.sidebar.number_input(
             "ChatGPT Temperature", min_value=0.0, max_value=1.0, step=0.1, value=0.0
@@ -121,9 +128,9 @@ def main():
         elif llm == "GPT4":
             llm = ChatOpenAI(model_name="gpt-4", temperature=temperature)
 
-        if pdf_file_path != "":
-            docs = setup_documents(pdf_file_path, chunk_size, chunk_overlap)
-            st.write("Pdf was loaded successfully")
+        if file_path != "":
+            docs = setup_documents(file_path, chunk_size, chunk_overlap)
+            st.write("File was loaded successfully")
 
             if st.button("Summarize"):
                 result = custom_summary(
