@@ -6,12 +6,14 @@ from langchain import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains.summarize import load_summarize_chain
 from langchain.chat_models import ChatOpenAI
+from langchain.llms import Cohere
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
-
+COHERE_API_KEY = os.environ["COHERE_API_KEY"]
+    
 @st.cache_data
 def setup_documents(file_path, chunk_size, chunk_overlap):
     extension = os.path.splitext(file_path)[1][1:].lower()
@@ -119,11 +121,13 @@ def main():
         )
 
         # make the choice of llm to select from a selectbox
-        llm = st.sidebar.selectbox("LLM", ["ChatGPT", "GPT4", ""])
+        llm = st.sidebar.selectbox("LLM", ["ChatGPT", "GPT4", "Cohere", ""])
         if llm == "ChatGPT":
             llm = ChatOpenAI(temperature=temperature)
         elif llm == "GPT4":
             llm = ChatOpenAI(model_name="gpt-4", temperature=temperature)
+        elif llm == "Cohere":
+            llm = Cohere(temperature=temperature)
 
         if file_path != "":
             docs = setup_documents(file_path, chunk_size, chunk_overlap)
