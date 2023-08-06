@@ -13,7 +13,8 @@ load_dotenv(find_dotenv())
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 COHERE_API_KEY = os.environ["COHERE_API_KEY"]
-    
+
+
 @st.cache_data
 def setup_documents(file_path, chunk_size, chunk_overlap):
     extension = os.path.splitext(file_path)[1][1:].lower()
@@ -21,7 +22,7 @@ def setup_documents(file_path, chunk_size, chunk_overlap):
         loader = PyPDFLoader(file_path)
     else:
         loader = TextLoader(file_path)
-        
+
     docs_raw = loader.load()
     docs_raw_text = [doc.page_content for doc in docs_raw]
     text_splitter = RecursiveCharacterTextSplitter(
