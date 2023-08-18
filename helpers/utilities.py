@@ -1,5 +1,6 @@
 import os
 import importlib
+from dotenv import load_dotenv, find_dotenv, dotenv_values
 
 def install_if_needed(package_names):
     """
@@ -24,13 +25,7 @@ def install_if_needed(package_names):
                 print(f"Installed {package_name}.")
             except subprocess.CalledProcessError:
                 print(f"Failed to install {package_name}.")
-
-def load_keys():
-    install_if_needed("dotenv")
-    from dotenv import load_dotenv, find_dotenv
-    load_dotenv(find_dotenv())
-    return
-            
+                
 def running_in_colab():
     """
     Check if the Jupyter Notebook is running in Google Colab.
@@ -43,3 +38,67 @@ def running_in_colab():
         return True
     except ImportError:
         return False
+
+def check_env_variable(variable_name):
+    """
+    Check if an environment variable exists.
+
+    Parameters:
+        variable_name (str): The name of the environment variable to check.
+
+    Returns:
+        bool: True if the environment variable exists, False otherwise.
+    """
+    if variable_name in os.environ:
+        return True
+    return False          
+
+def delete_env_variable(variable_name):
+    """
+    Delete an environment variable if it exists.
+
+    Parameters:
+        variable_name (str): The name of the environment variable to delete.
+
+    Returns:
+        bool: True if the environment variable was deleted or didn't exist, False if an error occurred.
+    """
+
+    if check_env_variable(variable_name):
+        try:
+            del os.environ[variable_name]
+            return True
+        except Exception as e:
+            print(f"Error deleting environment variable '{variable_name}': {e}")
+            return False
+    else:
+        return True  # Variable didn't exist, so consider it "deleted"
+                
+def load_keys(env_file=".env"):
+    """
+    Load environment variables from a specified dotenv file.
+
+    Parameters:
+        env_file (str, optional): The name of the dotenv file to load.
+            Defaults to ".env".
+
+    Returns:
+        None
+    """
+    load_dotenv(find_dotenv(env_file))
+    return
+
+def get_env_file_keys(env_file=".env"):
+    """
+    Get the key names (variable names) from a dotenv file.
+
+    Parameters:
+        env_file (str, optional): The name of the dotenv file to parse.
+            Defaults to ".env".
+
+    Returns:
+        list: List of key names (variable names) from the dotenv file.
+    """
+    env_values = dotenv_values(find_dotenv(env_file))
+    result = list(env_values.keys())
+    return result
