@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv, find_dotenv
 from langchain.chat_models import ChatOpenAI
 
-#load_dotenv(find_dotenv(".langsmith_env"))
+load_dotenv(find_dotenv(".langsmith_env"))
 load_dotenv(find_dotenv())
 
 vars = ["LANGCHAIN_TRACING_V2",
