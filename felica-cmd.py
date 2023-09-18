@@ -5,8 +5,8 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationSummaryBufferMemory
 
-load_dotenv(find_dotenv(".langsmith_env"))
-load_dotenv(find_dotenv())
+load_dotenv(find_dotenv(".env_langsmith"))
+load_dotenv(find_dotenv(".env_openai"))
 
 
 class MyCmd(cmd.Cmd):
@@ -45,7 +45,7 @@ class MyCmd(cmd.Cmd):
         """Send a user prompt to the chatbot."""
         if self.llm:
             result = self.conversation(line)['response']
-            print(textwrap.fill(result))
+            print("Felicia: ", textwrap.fill(result))
         else:
             print("Please select a model using 'model gpt-3.5-turbo' or 'model GPT-4'.")
 
