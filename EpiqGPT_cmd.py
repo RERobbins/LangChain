@@ -10,8 +10,8 @@ load_dotenv(find_dotenv(".env_openai"))
 
 
 class MyCmd(cmd.Cmd):
-    intro = "Welcome to Felica, a Private ChatGPT Clone. Type 'help' to list special commands."
-    prompt = "Human> "
+    intro = "Welcome to EpiqGPT, a Private ChatGPT Clone. Type 'help' to list special commands."
+    prompt = "Human: "
 
     llm = None
     conversation = None
@@ -45,7 +45,7 @@ class MyCmd(cmd.Cmd):
         """Send a user prompt to the chatbot."""
         if self.llm:
             result = self.conversation(line)['response']
-            print("Felicia: ", textwrap.fill(result))
+            print("EpiqGPT: ", textwrap.fill(result, subsequent_indent = " " * 10))
         else:
             print("Please select a model using 'model gpt-3.5-turbo' or 'model GPT-4'.")
 
