@@ -7,7 +7,7 @@ from langchain.chains import ConversationChain
 from langchain.memory import ConversationSummaryBufferMemory
 
 # If you have an accessible langsmith endpoint you can use it.
-# load_dotenv(find_dotenv(".env_langsmith"))
+load_dotenv(find_dotenv(".env_langsmith"))
 
 
 # This script relies on .env style files.
